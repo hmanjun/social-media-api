@@ -1,7 +1,9 @@
 const router = require('express').Router()
 
-router.route('/thoughts').get().post()
+router.route('/').get().post()
 
-router.route('/thoughts/:thoughtId').get()
+router.route('/:thoughtId').get()
 
-router.route('/thoughts/:thoughtId/reactions').post().delete()
+router.route('/:thoughtId/reactions').post().delete()
+
+module.exports = router
