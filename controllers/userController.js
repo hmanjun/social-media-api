@@ -28,4 +28,18 @@ async function createUser(req,res) {
     }
 }
 
-module.exports = {getUser, getSingleUser, createUser}
+async function updateUser(req,res) {
+    try {
+        const userData = await User.findOneAndUpdate(
+            {_id: req.params.userId},
+            {$set: req.body},
+            {runValidators: true, new: true}
+        )
+        ! userData ? res.status(404).json({message: `No user found with that id`})
+        : res.status(200).json(userData)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+module.exports = {getUser, getSingleUser, createUser, updateUser}
