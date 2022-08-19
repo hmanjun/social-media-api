@@ -66,4 +66,18 @@ async function addFriend(req,res) {
     }
 }
 
-module.exports = {getUser, getSingleUser, createUser, updateUser, deleteUser, addFriend}
+async function removeFriend(req,res) {
+    try {
+        const userData = await User.findByIdAndUpdate(
+            {_id: req.params.userId},
+            {$pull: {friends: req.params.friendId}},
+            { runValidators: true, new: true }
+        )
+        ! userData ? res.status(404).json({message: `No user found with that id`})
+        : res.status(200).json(userData)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+module.exports = {getUser, getSingleUser, createUser, updateUser, deleteUser, addFriend, removeFriend}
