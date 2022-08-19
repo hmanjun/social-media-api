@@ -67,4 +67,32 @@ async function deleteThought(req,res) {
     }
 }
 
-module.exports = {getThought,getSingleThought,createThought,updateThought,deleteThought}
+async function createReaction(req,res) {
+    try {
+        const thoughtData = await Thought.findOneAndUpdate(
+            {_id: req.params.thoughtId},
+            {$push: {reactions: req.body}},
+            {runValidators: true, new: true}
+        )
+        ! thoughtData ? res.status(404).json({message: `No thought found with that thought id`})
+        : res.status(200).json(thoughtData)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+async function deleteReaction(req,res) {
+    try {
+        const thoughtData = await Thought.findOneAndUpdate(
+            {_id: req.params.thoughtId},
+            {$pull: {reactions: {reactionId: req.body.reactionId}}},
+            {runValidators: true, new: true}
+        )
+        ! thoughtData ? res.status(404).json({message: `No thought found with that thought id`})
+        : res.status(200).json(thoughtData)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+module.exports = {getThought,getSingleThought,createThought,updateThought,deleteThought, createReaction, deleteReaction}
