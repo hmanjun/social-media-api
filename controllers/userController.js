@@ -42,4 +42,14 @@ async function updateUser(req,res) {
     }
 }
 
-module.exports = {getUser, getSingleUser, createUser, updateUser}
+async function deleteUser(req,res) {
+    try {
+        const userData = await User.findOneAndDelete({_id: req.params.userId})
+        ! userData ? res.status(404).json({message: `No user found with that id`})
+        : res.status(200).json(userData)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+module.exports = {getUser, getSingleUser, createUser, updateUser, deleteUser}
